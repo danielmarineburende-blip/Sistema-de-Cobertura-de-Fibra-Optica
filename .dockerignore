@@ -1,0 +1,30 @@
+# Archivos que NO se envían a Docker al construir la imagen.
+
+# Se generan dentro del contenedor
+node_modules
+.next
+out
+
+# Secretos y configuración local: NUNCA dentro de la imagen
+.env
+.env.*
+!.env.example
+
+# Control de versiones, editores y sistema
+.git
+.gitignore
+.vscode
+.idea
+*.log
+npm-debug.log*
+Thumbs.db
+.DS_Store
+
+# No son necesarios para ejecutar la app
+scripts
+README.md
+AGENTS.md
+Dockerfile
+docker-compose.yml
+.dockerignore
+tsconfig.tsbuildinfo

@@ -1,0 +1,45 @@
+# =============================================================
+#  Sistema de Cobertura de Fibra Óptica — Docker Compose
+#  Los valores ${...} se leen del archivo .env (en local) o de las
+#  variables de entorno del stack (en Portainer). Nunca se escriben aquí.
+# =============================================================
+services:
+  cobertura-fibra:
+    build:
+      context: .
+    image: cobertura-fibra:1.0
+    container_name: cobertura-fibra
+    restart: unless-stopped
+
+    # equipo:contenedor → la app escucha en el 3000 DENTRO del contenedor,
+    # y se publica en el puerto PUERTO_HOST del equipo (3001 por defecto).
+    ports:
+      - "${PUERTO_HOST:-3001}:3000"
+
+    environment:
+      # Origen de los datos: "prueba" o "mikrowisp"
+      DATA_SOURCE: ${DATA_SOURCE:-prueba}
+
+      # Conexión a MikroWISP (usuario de SOLO LECTURA)
+      MIKROWISP_DB_HOST: ${MIKROWISP_DB_HOST:-}
+      MIKROWISP_DB_PORT: ${MIKROWISP_DB_PORT:-3306}
+      MIKROWISP_DB_NAME: ${MIKROWISP_DB_NAME:-}
+      MIKROWISP_DB_USER: ${MIKROWISP_DB_USER:-}
+      MIKROWISP_DB_PASSWORD: ${MIKROWISP_DB_PASSWORD:-}
+      MIKROWISP_DB_TYPE: ${MIKROWISP_DB_TYPE:-mysql}
+
+      # Niveles de cobertura y cantidad de cajas mostradas
+      RADIO_SEGURO_METROS: ${RADIO_SEGURO_METROS:-80}
+      RADIO_MAXIMO_METROS: ${RADIO_MAXIMO_METROS:-250}
+      TERMINALES_CERCANAS: ${TERMINALES_CERCANAS:-10}
+      CACHE_PUNTOS_SEGUNDOS: ${CACHE_PUNTOS_SEGUNDOS:-60}
+
+      # Búsqueda de direcciones (Nominatim)
+      NOMINATIM_EMAIL: ${NOMINATIM_EMAIL:-}
+      NOMINATIM_PAISES: ${NOMINATIM_PAISES:-do}
+
+      TZ: America/Santo_Domingo
+
+    # Límites para que el contenedor no consuma de más en el servidor
+    mem_limit: 512m
+    cpus: 1.0
